@@ -11,7 +11,7 @@ public class DebugPlayerController : MonoBehaviour
 {
     Rigidbody playerBody;
 
-    public float speed = 5;
+    public float speed = 2;
 
     void Start()
     {
