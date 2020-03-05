@@ -1095,6 +1095,11 @@ PrefabInstance:
       propertyPath: directionalSupport
       value: 
       objectReference: {fileID: 1502826744}
+    - target: {fileID: 4094301904103741996, guid: 89f639131a7cf2d4580a950e12843077,
+        type: 3}
+      propertyPath: lightIntensityNight
+      value: 0.15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89f639131a7cf2d4580a950e12843077, type: 3}
 --- !u!1 &381190056
@@ -2204,7 +2209,7 @@ MonoBehaviour:
     Wanneer er iets mis gaat kan het slimme huis snel hulp inschakelen."
   startWithCurtainsOpen: 0
   startWithLightsOn: 0
-  scenarioDayPart: 2
+  scenarioDayPart: 0
   steps:
   - {fileID: 412010097}
   - {fileID: 1460903445}

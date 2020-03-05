@@ -13,9 +13,9 @@ public class DayNightManager : MonoBehaviour
     public Light directionalMain;
     public Light directionalSupport;
 
-    // Night 
+    // Night
     public Material skyboxNight;
-    public float lightIntensityNight = 0.25f;
+    public float lightIntensityNight = 0.15f;
 
     // Morning
     public Material skyboxMorning;
@@ -63,10 +63,10 @@ public class DayNightManager : MonoBehaviour
 
     private void SetLights(float main, float support, float rest)
     {
-        foreach (Light light in FindObjectsOfType<Light>())
-        {
-            light.intensity = rest;
-        }
+//        foreach (Light light in FindObjectsOfType<Light>())
+  //      {
+    //        light.intensity = rest;
+      //  }
         directionalMain.intensity = main;
         directionalSupport.intensity = support;
     }

@@ -38,7 +38,7 @@ public class Scenario : MonoBehaviour
 
     void Start()
     {
-        state = State.WAITING; 
+        state = State.WAITING;
     }
 
     public void InitializeScenario()
