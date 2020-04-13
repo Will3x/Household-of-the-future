@@ -9,36 +9,32 @@ using UnityEngine;
 /// @Version: 1.0
 /// @Authors: Leon Smit
 /// </summary>
-public class LightSensor : MonoBehaviour
-{
+public class LightSensor : MonoBehaviour{
     public LightController lightController;
-    public int waitTime = 5;
+    public float marginTimeInSeconds = 3.0f;
 
-    private float lastTime;
-    private bool countingDown;
+    private float timeWhenUserLeftInSeconds;
+    private bool userLeftTheRoom;
 
     // Update is called once per frame
-    void Update()
-    {
-        if (countingDown)
-        {
-            if (Time.time > lastTime + waitTime)
-            {
-                lightController.TurnOff();
-                countingDown = false;
-            }
+    void Update(){
+        if (userLeftTheRoom && Time.time > (timeWhenUserLeftInSeconds + marginTimeInSeconds)){
+            lightController.TurnOff();
+            userLeftTheRoom = false;
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        countingDown = false;
+    private void OnTriggerEnter(Collider other){
         lightController.TurnOn();
+        userLeftTheRoom = false;
+
+        Debug.Log("entered the room: " + name);
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        lastTime = Time.time;
-        countingDown = true;
+    private void OnTriggerExit(Collider other){
+        timeWhenUserLeftInSeconds = Time.time;
+        userLeftTheRoom = true;
+
+        Debug.Log("Left the room: " + name);
     }
 }

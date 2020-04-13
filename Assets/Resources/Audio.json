@@ -3,12 +3,12 @@
 		{
 			"name": "OpenDoor",
 			"path": "Audio/OpenDoor",
-			"volume": "1.0f"
+			"volume": "0.5f"
 		},
 		{
 			"name": "CloseDoor",
 			"path": "Audio/CloseDoor",
-			"volume": "1.0f"
+			"volume": "0.5f"
 		},
 		{
 			"name": "MoveCurtain",
@@ -188,6 +188,11 @@
 		{
 			"name": "Water",
 			"path": "Audio/Energie_Info_Water",
+			"volume": "1.0f"
+		},
+		{
+			"name": "yawn-man",
+			"path": "Audio/Bathroom-at-night/yawn-man",
 			"volume": "1.0f"
 		}
 	]
