@@ -7,60 +7,61 @@ using UnityEngine;
 /// @Version: 1.0
 /// @Authors: Leon Smit, Daniël Geerts
 /// </summary>
-public class ToiletInteractable : Interactable
-{
+public class ToiletInteractable : Interactable {
 
-    public GameObject teleportSpot;
-    private PlayerController playercontroller;
+    public Transform onTheToilerLocation;
+    public Player player;
+    private Transform locationBeforeSittingOnToilet;
 
-    private bool sitOnToilet = false;
+    private bool isSittingOnTheToilet = false;
 
-    public override void OnStart()
-    {
-        playercontroller = FindObjectOfType<PlayerController>();
+    public override void OnStart() { }
+
+    public override bool isActive() {
+        return isSittingOnTheToilet;
     }
 
-    public override bool isActive()
-    {
-        return sitOnToilet;
-    }
-
-    public override void OnActivate()
-    {
-        if (stepHandler)
-        {
-            TeleportTo();
+    public override void OnActivate() {
+        if (stepHandler) {
+            sitOnToilet();
         }
     }
 
-    private void TeleportTo()
-    {
-        GameObject player = playercontroller.GetPlayer();
-
-        player.transform.SetPositionAndRotation(teleportSpot.transform.position, teleportSpot.transform.rotation);
-        if (stepHandler.IsActive())
-        {
-            playercontroller.DisablePlayerControls();
+    private void sitOnToilet() {
+        locationBeforeSittingOnToilet = player.GetComponent<Transform>();
+        player.transform.SetPositionAndRotation(onTheToilerLocation.transform.position, onTheToilerLocation.transform.rotation);
+        if (stepHandler.IsActive()) {
+            player.disablePlayerControls();
         }
 
         this.GetComponent<BoxCollider>().isTrigger = true;
-        sitOnToilet = true;
+        isSittingOnTheToilet = true;
+        StartCoroutine(waitAmoutOfSeconds(5));
     }
 
-    public override void OnDeselect()
-    {
+    IEnumerator waitAmoutOfSeconds(int amountInSeconds) {
+        for (float i = 0; i <= amountInSeconds; i += Time.deltaTime) {
+            yield return null;
+        }
+        getOffToilet();
+    }
+
+    private void getOffToilet() {
+        player.transform.SetPositionAndRotation(locationBeforeSittingOnToilet.transform.position, locationBeforeSittingOnToilet.transform.rotation);
+        player.enablePlayerControls();
+        isSittingOnTheToilet = false;
+    }
+
+    public override void OnDeselect() {
 
     }
 
-    public override void OnSelect()
-    {
+    public override void OnSelect() {
 
     }
 
     private float smooth = 5.0f;
     private float tiltAngle = 60.0f;
 
-    public override void OnUpdate()
-    {
-    }
+    public override void OnUpdate() { }
 }

@@ -9,8 +9,7 @@ using UnityEngine;
 /// @Version: 1.0
 /// @Authors: Florian Molenaars
 /// </summary>
-public class DomoticaController : MonoBehaviour
-{
+public class DomoticaController : MonoBehaviour {
     // Start is called before the first frame update
     private LightController[] lightControllers;
     private CurtainController[] curtainControllers;
@@ -18,8 +17,7 @@ public class DomoticaController : MonoBehaviour
     //to add domotica in mobile, add to this list
     private List<string> domotica;
 
-    void Awake()
-    {
+    void Awake() {
         domotica = new List<string>();
         lightControllers = GameObject.FindObjectsOfType<LightController>();
         curtainControllers = GameObject.FindObjectsOfType<CurtainController>();
@@ -27,133 +25,95 @@ public class DomoticaController : MonoBehaviour
         domotica.Add("Gordijnen");
     }
 
-    public void SwitchLightOnRoom(LightController liController)
-    {
+    public void SwitchLightOnRoom(LightController liController) {
         // switch all the lights connected to the light controller
-        foreach (LightController lightController in lightControllers)
-        {
-            if (lightController == liController)
-            {
-                if (!CheckIfLightsAreOn(lightController))
-                {
+        foreach (LightController lightController in lightControllers) {
+            if (lightController == liController) {
+                if (!CheckIfLightsAreOn(lightController)) {
                     lightController.TurnOn();
-                }
-                else
-                {
+                } else {
                     lightController.TurnOff();
                 }
             }
         }
     }
-    public void SwitchCurtainOnRoom(CurtainController curController)
-    {
+    public void SwitchCurtainOnRoom(CurtainController curController) {
         // switch all the curtains connected to the curtain controller
-        foreach (CurtainController curtainController in curtainControllers)
-        {
-            if (curtainController == curController)
-            {
-                if (!CheckIfCurtainsAreOpen(curtainController))
-                {
+        foreach (CurtainController curtainController in curtainControllers) {
+            if (curtainController == curController) {
+                if (!CheckIfCurtainsAreOpen(curtainController)) {
                     curtainController.OpenCurtains(false);
-                }
-                else
-                {
+                } else {
                     curtainController.CloseCurtains(false);
                 }
             }
         }
     }
 
-    public void SwitchLights(bool allOn)
-    {
-        foreach (LightController lightController in lightControllers)
-        {
-            if (allOn)
-            {
+    public void SwitchLights(bool allOn) {
+        foreach (LightController lightController in lightControllers) {
+            if (allOn) {
                 lightController.TurnOn();
-            }
-            else
-            {
+            } else {
                 lightController.TurnOff();
             }
 
         }
     }
 
-    public void SwitchCurtainsWithoutAnimation(bool allOpen)
-    {
+    public void SwitchCurtainsWithoutAnimation(bool allOpen) {
         //this is for when you need to switch the curtains at the start of the game to skip the animation
-        foreach (CurtainController curtainController in curtainControllers)
-        {
-            if (allOpen)
-            {
+        foreach (CurtainController curtainController in curtainControllers) {
+            if (allOpen) {
                 curtainController.OpenCurtains(true);
-            }
-            else
-            {
+            } else {
                 curtainController.CloseCurtains(true);
             }
         }
     }
 
-    public bool CheckIfLightsAreOn(LightController lightController)
-    {
+    public bool CheckIfLightsAreOn(LightController lightController) {
         //if more than 50 % of the lights are on this will return true
         float totalLights = 0;
         float totalEnabled = 0;
-        foreach (GameObject light in lightController.lights)
-        {
+        foreach (GameObject light in lightController.lights) {
             totalLights += 1;
-            if (light.GetComponentInChildren<Light>().enabled)
-            {
+            if (light.GetComponentInChildren<Light>().enabled) {
                 totalEnabled += 1.0f;
             }
 
         }
-        if (totalEnabled >= Mathf.Ceil(totalLights / 2))
-        {
+        if (totalEnabled >= Mathf.Ceil(totalLights / 2)) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
-    public bool CheckIfCurtainsAreOpen(CurtainController curtainController)
-    {
+    public bool CheckIfCurtainsAreOpen(CurtainController curtainController) {
         //if more than 50 % of the curtains are open this will return true
         float totalCurtains = 0.0f;
         float totalEnabled = 0.0f;
-        foreach (GameObject curtain in curtainController.curtains)
-        {
+        foreach (GameObject curtain in curtainController.curtains) {
             totalCurtains += 1.0f;
-            if (curtain.GetComponent<CurtainInteractable>().isActive())
-            {
+            if (curtain.GetComponent<CurtainInteractable>().isActive()) {
                 totalEnabled += 1.0f;
             }
         }
 
-        if (totalEnabled >= Mathf.Ceil(totalCurtains / 2.0f))
-        {
+        if (totalEnabled >= Mathf.Ceil(totalCurtains / 2.0f)) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
-
-    public List<string> GetListDomotica()
-    {
+    public List<string> GetListDomotica() {
         return domotica;
     }
-    public LightController[] GetListLights()
-    {
+    public LightController[] GetListLights() {
         return lightControllers;
     }
-    public CurtainController[] GetListCurtains()
-    {
+    public CurtainController[] GetListCurtains() {
         return curtainControllers;
     }
 }

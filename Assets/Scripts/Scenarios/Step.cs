@@ -7,12 +7,9 @@ using UnityEngine;
 /// @Version: 1.0
 /// @Authors: Leon Smit
 /// </summary>
-public abstract class Step : MonoBehaviour
-{
-    public string stepName;
+public abstract class Step : MonoBehaviour {
+    public string stepObjective;
     protected State state;
-
-    public  KeyCode skipKey = KeyCode.P;
 
     public abstract void OnStart();
     public abstract void OnUpdate();
@@ -20,41 +17,32 @@ public abstract class Step : MonoBehaviour
     public abstract void OnRun();
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         state = State.WAITING;
         OnStart();
     }
 
-    void Update()
-    {
-        if (!(state == State.RUNNING))
+    void Update() {
+        if (state != State.RUNNING) {
             return;
-
-        ScenarioController scenarioController = FindObjectOfType<ScenarioController>();
-        if (scenarioController.debugMode && Input.GetKeyDown(skipKey))
-            state = State.COMPLETED;
+        }
 
         OnUpdate();
     }
 
-    public void Run()
-    {
+    public void Run() {
         state = State.RUNNING;
         OnRun();
     }
-    public void Activate()
-    {
+    public void Activate() {
         OnActivate();
     }
 
-    public State getState()
-    {
+    public State getState() {
         return state;
     }
 
-    public string GetStepName()
-    {
-        return stepName;
+    public string GetStepName() {
+        return stepObjective;
     }
 }

@@ -9,8 +9,7 @@ using UnityEngine.UI;
 /// @Version: 1.0
 /// @Authors: Leon Smit
 /// </summary>
-public class Scenario : MonoBehaviour
-{
+public class Scenario : MonoBehaviour {
     public GameObject startingPoint;
 
     public int scenarioID;
@@ -36,13 +35,11 @@ public class Scenario : MonoBehaviour
 
     private bool isBeingUsed = false;
 
-    void Start()
-    {
-        state = State.WAITING; 
+    void Start() {
+        state = State.WAITING;
     }
 
-    public void InitializeScenario()
-    {
+    public void InitializeScenario() {
         // Initialize scene based on bool parameters
         DomoticaController dom = GameObject.FindObjectOfType<DomoticaController>();
         dom.SwitchCurtainsWithoutAnimation(startWithCurtainsOpen);
@@ -66,21 +63,18 @@ public class Scenario : MonoBehaviour
         state = State.RUNNING;
     }
 
-    public string GetStepDescription()
-    {
+    public string GetStepDescription() {
         return steps[activeStepIndex].GetStepName();
     }
 
-    public bool StepCompleted()
-    {
+    public bool StepCompleted() {
         if (step)
             return (step.getState() == State.COMPLETED);
         else
             return false;
     }
 
-    public bool HasNextStep()
-    {
+    public bool HasNextStep() {
         if (activeStepIndex + 1 <= steps.Count - 1) {
             return true;
         }
@@ -92,18 +86,15 @@ public class Scenario : MonoBehaviour
     }
 
     // Set activestep to next index
-    public void NextStep()
-    {
+    public void NextStep() {
         activeStepIndex++;
         step = steps[activeStepIndex];
         step.Run();
     }
-    public State GetState()
-    {
+    public State GetState() {
         return state;
     }
-    public void SetState(State newstate)
-    {
+    public void SetState(State newstate) {
         state = newstate;
     }
 

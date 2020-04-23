@@ -1,5 +1,4 @@
-﻿
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
@@ -9,48 +8,37 @@ using UnityEngine;
 /// @Version: 1.0
 /// @Authors: Florian Molenaars
 /// </summary>
-public class LightController : MonoBehaviour
-{
+public class LightController : MonoBehaviour {
     public List<GameObject> lights;
     public bool ShowControllerInMobile = true;
     public string controllerName = "Placeholder";
-    
-    public void TurnOn()
-    {
+
+    public void TurnOn() {
         // turn lights on that are connected with the lightcontroller
-        for (int i = 0; i < lights.Count; i++)
-        {
+        for (int i = 0; i < lights.Count; i++) {
             lights[i].GetComponentInChildren<Light>().enabled = true;
         }
     }
 
-
-    public void TurnOff()
-    {
+    public void TurnOff() {
         // turn lights off that are connected with the lightcontroller
-        for (int i = 0; i < lights.Count; i++)
-        {
+        for (int i = 0; i < lights.Count; i++) {
             lights[i].GetComponentInChildren<Light>().enabled = false;
         }
     }
 
-    public void Switch()
-    {
+    public void Switch() {
         GameObject.FindObjectOfType<DomoticaController>().SwitchLightOnRoom(this);
     }
 
-    public void IncreaseLightIntesity()
-    { 
-        for (int i = 0; i < lights.Count; i++)
-        {
+    public void IncreaseLightIntesity() {
+        for (int i = 0; i < lights.Count; i++) {
             lights[i].GetComponentInChildren<Light>().intensity = 8;
         }
     }
 
-    public void DecreaseLightIntesity()
-    {
-        for (int i = 0; i < lights.Count; i++)
-        {
+    public void DecreaseLightIntesity() {
+        for (int i = 0; i < lights.Count; i++) {
             lights[i].GetComponentInChildren<Light>().intensity = 1.5f;
         }
     }

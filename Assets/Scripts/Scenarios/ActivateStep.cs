@@ -1,6 +1,6 @@
-﻿using cakeslice;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using cakeslice;
 using UnityEngine;
 
 /// <summary>
@@ -8,40 +8,26 @@ using UnityEngine;
 /// @Version: 1.0
 /// @Authors: Leon Smit
 /// </summary>
-public class ActivateStep : Step
-{
+public class ActivateStep : Step {
 
-    public List<GameObject> activators;
+    public List<Trigger> triggers;
 
-    public override void OnActivate()
-    {
+    public override void OnActivate() {
         state = State.COMPLETED;
     }
 
-    public override void OnRun()
-    {
+    public override void OnRun() { }
+
+    public override void OnStart() {
+        giveActivatorsStepReference();
     }
 
-    public override void OnStart()
-    {
-        AddToGameObjects();
-    }
+    public override void OnUpdate() { }
 
-    public override void OnUpdate()
-    {
-
-    }
-
-    private void AddToGameObjects()
-    {
-        foreach (GameObject go in activators)
-        {
-            StepHandler stepHandler = go.GetComponent<StepHandler>();
-
-            if (stepHandler == null)
-                stepHandler = go.AddComponent<StepHandler>();
-
-            stepHandler.AddStep(GetComponent<Step>());
+    private void giveActivatorsStepReference() {
+        foreach (Trigger trigger in triggers) {
+            StepHandler stepHandler = trigger.GetComponent<StepHandler>();
+            stepHandler.AddStep(this);
         }
     }
 }

@@ -10,8 +10,7 @@ using UnityEngine.UI;
 /// @Version: 1.0
 /// @Authors: Leon Smit
 /// </summary>
-public class DebugRayCast : MonoBehaviour
-{
+public class DebugRayCast : MonoBehaviour {
     public float rayLength;
     public Image image;
     public GameObject mobile;
@@ -23,23 +22,17 @@ public class DebugRayCast : MonoBehaviour
     public Color crosshairDefaultColor = Color.white;
     public Color crosshairSelectColor = Color.green;
 
-
-
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         Vector3 origin = this.transform.position;
         Vector3 direction = this.transform.forward * rayLength;
 
-        if (Input.GetKeyDown(KeyCode.T))
-        {
+        if (Input.GetKeyDown(KeyCode.T)) {
 
-            if (mobileActive)
-            {
+            if (mobileActive) {
                 mobileActive = !mobileActive;
                 mobile.SetActive(false);
-            }
-            else{
+            } else {
                 mobileActive = !mobileActive;
                 mobile.SetActive(true);
             }
@@ -47,45 +40,34 @@ public class DebugRayCast : MonoBehaviour
 
         // Draw the Raycast and puts colliding object in vision variable
         Debug.DrawRay(origin, direction);
-        if (Physics.Raycast(origin, direction, out vision, rayLength))
-        {
+        if (Physics.Raycast(origin, direction, out vision, rayLength)) {
             // If object has Interactable tag continue
-            if (vision.collider.tag.Equals("Interactable") && FindObjectOfType<PlayerController>().PlayerControlsEnabled())
-            {
+            if (vision.collider.tag.Equals("Interactable") && FindObjectOfType<PlayerController>().PlayerControlsEnabled()) {
                 // Check if object is Interactable
                 bool succes = vision.collider.gameObject.TryGetComponent<Interactable>(out Interactable newSelection);
 
                 image.color = crosshairSelectColor;
                 // If object has Interactable component, continue,
                 // else Log in error
-                if (succes)
-                {
+                if (succes) {
                     // If object is newly selected, perform select function
-                    if (!currentSelection)
-                    {
+                    if (!currentSelection) {
                         currentSelection = newSelection;
                         currentSelection.Select();
-                    }
-                    else if (!newSelection.Equals(currentSelection))
-                    {
+                    } else if (!newSelection.Equals(currentSelection)) {
                         currentSelection.Deselect();
                         currentSelection = newSelection;
                         currentSelection.Select();
                     }
-                }
-                else
-                {
+                } else {
                     Debug.LogError(vision.collider.name + " has an Interactable tag, but does not contain an Interactable component");
                     currentSelection = null;
                     image.color = crosshairDefaultColor;
                 }
-            }
-            else
-            {
+            } else {
                 // If no interactable object is collided with, but there is an object selected,
                 // deselect the object.
-                if (currentSelection)
-                {
+                if (currentSelection) {
                     currentSelection.Deselect();
                     currentSelection = null;
                     image.color = crosshairDefaultColor;
@@ -93,8 +75,7 @@ public class DebugRayCast : MonoBehaviour
             }
         }
         // if no object is collided with, deselect the current selection if it exists
-        else if (currentSelection)
-        {
+        else if (currentSelection) {
             currentSelection.Deselect();
             currentSelection = null;
             image.color = crosshairDefaultColor;

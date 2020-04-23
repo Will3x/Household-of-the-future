@@ -7,62 +7,56 @@ using UnityEngine;
 /// @Version: 1.0
 /// @Authors: Florian Molenaars
 /// </summary>
-public class DoorInteractable : Interactable
-{
+public class DoorInteractable : Interactable {
+
     public bool isOpen = false;
     private AudioManager audioManager;
-    public override void OnStart()
-    {
+    private Animator animator;
+
+    public override void OnStart() {
+        animator = this.gameObject.GetComponent<Animator>();
         audioManager = FindObjectOfType<AudioManager>();
     }
-    public override bool isActive()
-    {   
+
+    public override bool isActive() {
         return isOpen;
     }
 
-    public override void OnActivate()
-    {
-        // opens/closes the door
-        // also adds animation and soundto the door 
-        if (isOpen)
-        {
-            if (this.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime > 1 && !this.GetComponent<Animator>().IsInTransition(0))
-            {
-                    if (audioManager != null)
-                    {
-                        audioManager.Play("CloseDoor");
-                    }
-                    this.gameObject.GetComponent<Animator>().Play("CloseDoor");
-                isOpen = !isOpen;
-                //throw new System.NotImplementedException();
+    public override void OnActivate() {
+        if (isCurrentlyNotInAnimation()) {
+            if (isOpen) {
+                closeDoor();
+            } else {
+                openDoor();
             }
         }
-        else
-        {
-            if (this.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime > 1 && !this.GetComponent<Animator>().IsInTransition(0))
-            {
-                if(audioManager != null)
-                {
-                    audioManager.Play("OpenDoor");
-                }
-                gameObject.GetComponent<Animator>().Play("OpenDoor");
-                isOpen = !isOpen;
-            }
-        }
-        }
+    }
 
-    public override void OnDeselect()
-    {
+    private bool isCurrentlyNotInAnimation(){
+        return animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1 && !animator.IsInTransition(0);
+    }
+
+    private void closeDoor() {
+        animator.Play("CloseDoor");
+        audioManager.Play("CloseDoor");
+        isOpen = !isOpen;
+    }
+
+    private void openDoor() {
+        animator.Play("OpenDoor");
+        audioManager.Play("OpenDoor");
+        isOpen = !isOpen;
+    }
+
+    public override void OnDeselect() {
         //throw new System.NotImplementedException();
     }
 
-    public override void OnSelect()
-    {
+    public override void OnSelect() {
         //throw new System.NotImplementedException();
     }
-    
-    public override void OnUpdate()
-    {
+
+    public override void OnUpdate() {
         //throw new System.NotImplementedException();
     }
 

@@ -1,6 +1,8 @@
-﻿using UnityEngine;
-using cakeslice;
+﻿using System;
 using System.Collections.Generic;
+using cakeslice;
+using UnityEngine;
+
 /// <summary>
 /// This is the abstract class of all interactables.
 /// It adds an outline on the object that is interactable.
@@ -8,11 +10,11 @@ using System.Collections.Generic;
 /// @Version: 1.0
 /// @Authors: Leon Smit
 /// </summary>
-public abstract class Interactable : MonoBehaviour
-{
-    private List<Renderer> renderers;
-    private bool outlineIsActive;
-    protected StepHandler stepHandler;
+public abstract class Interactable : Trigger {
+
+    private List<Renderer> rendererList;
+    private bool isCurrentlySelected;
+    private Material selectedObjectMaterial;
 
     public abstract void OnActivate();
     public abstract void OnSelect();
@@ -21,97 +23,71 @@ public abstract class Interactable : MonoBehaviour
     public abstract void OnUpdate();
     public abstract bool isActive();
 
-    private void Awake()
-    {
-        renderers = new List<Renderer>();
-        stepHandler = gameObject.AddComponent<StepHandler>();
+    private void Awake() {
+        rendererList = new List<Renderer>();
+        selectedObjectMaterial = Resources.Load("Materials/OutlineMaterial", typeof(Material)) as Material;
     }
 
-    private void Start()
-    {
-        Renderer goRenderer = this.gameObject.GetComponent<Renderer>();
-
-        if (goRenderer)
-        {
-            renderers.Add(goRenderer);
-        }
-
-        foreach (Renderer renderer in GetComponentsInChildren<Renderer>())
-        {
-            if (renderer) renderers.Add(renderer);
-        }
-
-        SetOutline(false);
+    private void Start() {
+        gatherAllRendererComponents();
+        removeSelectionMaterial();
         OnStart();
     }
 
-    private void Update()
-    {
+    private void gatherAllRendererComponents() {
+        Renderer thisObjectRenderer = this.gameObject.GetComponent<Renderer>();
+
+        if (thisObjectRenderer) {
+            rendererList.Add(thisObjectRenderer);
+        }
+
+        foreach (Renderer childObjectRenderer in GetComponentsInChildren<Renderer>()) {
+            rendererList.Add(childObjectRenderer);
+        }
+    }
+
+    private void Update() {
         OnUpdate();
     }
 
-    public void Select()
-    {
-        SetOutline(true);
-
+    public void Select() {
+        applySelectionMaterial();
         OnSelect();
     }
 
-    public void Deselect()
-    {
-        SetOutline(false);
+    public void Deselect() {
+        removeSelectionMaterial();
         OnDeselect();
     }
 
-    public void Activate()
-    {
+    public void Activate() {
         OnActivate();
-        if (stepHandler) stepHandler.Activate();
-
+        fire();
     }
 
-    private void SetOutline(bool enabled)
-    {
-        // adds an outline on the selected interactable.
-        if (enabled)
-        {
-            if (outlineIsActive) return;
+    private void applySelectionMaterial() {
+        if (isCurrentlySelected) return;
 
-            Material outlineMat = Resources.Load("Materials/OutlineMaterial", typeof(Material)) as Material;
+        foreach (Renderer renderer in rendererList) {
+            Material[] materials = renderer.materials;
+            Array.Resize(ref materials, materials.Length + 1);
 
-            foreach (Renderer renderer in renderers)
-            {
-                Material[] materials = new Material[renderer.materials.Length + 1];
-
-                for (int i = 0; i < renderer.materials.Length; i++)
-                {
-                    materials[i] = renderer.materials[i];
-                }
-
-                materials[materials.Length - 1] = outlineMat;
-
-                renderer.materials = materials;
-            }
-
-            outlineIsActive = true;
+            materials[materials.Length - 1] = selectedObjectMaterial;
+            renderer.materials = materials;
         }
-        else
-        {
-            if (!outlineIsActive) return;
 
-            foreach (Renderer renderer in renderers)
-            {
-                Material[] materials = new Material[renderer.materials.Length - 1];
+        isCurrentlySelected = true;
+    }
 
-                for (int i = 0; i < materials.Length; i++)
-                {
-                    materials[i] = renderer.materials[i];
-                }
+    private void removeSelectionMaterial() {
+        if (!isCurrentlySelected) return;
 
-                renderer.materials = materials;
-            }
-
-            outlineIsActive = false;
+        foreach (Renderer renderer in rendererList) {
+            Material[] materials = renderer.materials;
+            Array.Resize(ref materials, materials.Length - 1);
+            renderer.materials = materials;
         }
+
+        isCurrentlySelected = false;
     }
 }
